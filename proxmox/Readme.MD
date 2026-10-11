@@ -9,7 +9,7 @@
 1. Отключить проверку подписки (уведомление при входе)
     1. Открыть **/usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js** 
     1. Найти блок кода с проверкой подписки или строчку с `No valid subscription`
-    1. Закомментировать строку с показом модалки `Ext.Msg.show`
+    1. Закомментировать строку с показом модалки `No valid subscription`
     1. Перезапустить веб-интрефейс коммандой `systemctl restart pveproxy.service`
 
 ## Установка Windows 11
