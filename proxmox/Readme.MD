@@ -24,18 +24,13 @@
     vfio_pci
     ```
 1. Импортировать модули `update-initramfs -u -k all`
-1. Запретить загрузку драйверов GPU на хосте
-    - дописать в **/etc/modprobe.d/pve-blacklist.conf**
-        - **Nvidia**
-            ```bash
-            blacklist nouveau
-            blacklist nvidia*
-            ```
-        - **AMD**
-            ```bash
-            blacklist amdgpu
-            blacklist radeon
-            ```
+1. Запретить загрузку драйверов GPU (Nvidia и AMD) на хосте - дописать в **/etc/modprobe.d/pve-blacklist.conf**
+    ```bash
+    blacklist nouveau
+    blacklist nvidia*
+    blacklist amdgpu
+    blacklist radeon
+    ```
 1. Отключить инициализацию видеокарты на хосте
     1. Найти ID GPU `lspci` вида `xx:xx`
     1. Получить из команды `lspci -n -s xx:xx` ID вида `xxxx:xxxx`
