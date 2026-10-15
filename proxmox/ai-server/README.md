@@ -6,35 +6,35 @@
 ### Настроки VM
 
 - **System**: 
-    - Machine *q35*,
-    - BIOS *OVMF (UEFI)*,
-    - Pre-Enroll Keys ❌,
-    - Qemu Agent ✅.
+    - Machine `q35`,
+    - BIOS `OVMF (UEFI)`,
+    - Pre-Enroll Keys `❌`,
+    - Qemu Agent `✅`.
 - **Disk**:
     - Выбрать Storage,
-    - Disk size *96GB*,
-    - Cache *Write back*,
-    - Discard ✅,
-    - IO thread ✅;
-    - SSD emulation ✅,
-    - Backup ❌.
+    - Disk size `96GB`,
+    - Cache `Write back`,
+    - Discard `✅`,
+    - IO thread `✅`;
+    - SSD emulation `✅`,
+    - Backup `❌`.
 - **CPU**:
-    - Cores *реальное число ядер*,
-    - Type *host*.
+    - Cores `реальное число ядер`,
+    - Type `host`.
 - **Memory**:
-    - Memory *больше - лучше*,
-    - Balooning Device ❌.
-- **Network**: Model *VirtIO (paravirtualized)*
+    - Memory `больше - лучше`,
+    - Balooning Device `❌`.
+- **Network**: Model `VirtIO (paravirtualized)`
 - **Перед запуском** пробросить видеокарту как PCI Device:
-    - All Functions ✅,
-    - ROM-Bar ✅,
-    - PCI-Express ✅.
+    - All Functions `✅`,
+    - ROM-Bar `✅`,
+    - PCI-Express `✅`.
 
 ### Установка дистрибутива
 
  1. Базовый вариант установки, не *minimized*.
- 1. *Set up this disk as an LVM goup* ❌. 
- 1. *Install OpenSSH server* ✅.
+ 1. *Set up this disk as an LVM goup* `❌`. 
+ 1. *Install OpenSSH server* `✅`.
 
 **После установки** удалить ISO-образ Ubuntu из списка устройств. Дальше удобнее подключаться по SSH.
 
