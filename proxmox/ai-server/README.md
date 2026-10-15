@@ -11,7 +11,7 @@
     - Pre-Enroll Keys `❌`,
     - Qemu Agent `✅`.
 - **Disk**:
-    - Выбрать Storage,
+    - Storage `Выбрать`,
     - Disk size `96GB`,
     - Cache `Write back`,
     - Discard `✅`,
