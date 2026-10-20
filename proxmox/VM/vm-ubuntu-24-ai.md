@@ -27,5 +27,8 @@
         - All Functions: `✅`
         - ROM-Bar: `✅`
         - PCI-Express: `✅`
-1. [Установить дистрибутив](../../ai-services/install-os.md).
+1. Установить дистрибутив
+    1. Базовый вариант установки, не *minimized*.
+    1. *Set up this disk as an LVM group*: `❌`.
+    1. *Install OpenSSH server*: `✅`.
 1. Удалить ISO-образ Ubuntu из списка устройств, подключаться к VM по SSH.
