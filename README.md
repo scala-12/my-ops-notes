@@ -6,3 +6,4 @@
 
 1. [Proxmox](proxmox/README.md)
 1. [AI сервисы](ai-services/README.md)
+1. [Windows 11](windows-11/README.md)
