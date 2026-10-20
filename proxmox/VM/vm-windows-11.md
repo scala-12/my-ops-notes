@@ -1,6 +1,6 @@
-## Установка Windows 11
+# Установка Windows 11
 
-1. Добавить ISO Windows 11 PRO (с RDP) и [дополнение ОС](https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/latest-virtio/virtio-win.iso)
+1. Добавить ISO Windows 11 PRO (с RDP) и [дополнение ОС virtio-win](https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/latest-virtio/virtio-win.iso)
 1. Создать VM
     - **OS**: выбрать ISO, тип ОС
     - **System**: выбрать EFI Storage, TPM Storage, Graphic card *None* (при пробросе GPU)
