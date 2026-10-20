@@ -60,16 +60,54 @@ schtasks /Create /TN "RememberLastWindows" /SC ONSTART /RU SYSTEM /RL HIGHEST /T
 
 ## BAT File to Reboot into the Other Windows
 
-Узнайте идентификатор целевой системы командой `bcdedit /enum osloader`. В следующем файле замените `{GUID-ДРУГОЙ-WINDOWS}` на её идентификатор и сохраните файл с расширением `.bat`, например `Перезагрузка-в-другую-Windows.bat`. Запустите его **от имени администратора**. Команда задаёт целевую ОС для следующей загрузки, затем компьютер перезагружается.
+Узнайте идентификатор целевой системы командой `bcdedit /enum osloader` и сохраните его в переменную окружения `ANOTHER_WINDOWS_GUID`. Сохраните файл ниже с расширением `.bat`, например `Перезагрузка-в-другую-Windows.bat`. Запустите его **от имени администратора**. Команда задаёт целевую ОС для следующей загрузки, затем компьютер перезагружается.
 
 ```bat
 @echo off
-set "TARGET={GUID-ДРУГОЙ-WINDOWS}"
-bcdedit /bootsequence %TARGET%
+
+:: Включаем поддержку UTF-8 (русский язык без кракозябр)
+chcp 65001 >nul
+
+:: БЛОК ПРОВЕРКИ И ЗАПРОСА ПРАВ АДМИНИСТРАТОРА
+net session >nul 2>&1
+if %errorlevel% neq 0 (
+    echo Запрос прав администратора...
+    powershell -Command "Start-Process '%~f0' -Verb RunAs"
+    exit /b
+)
+
+set "FOUND=0"
+for /f "usebackq tokens=1*" %%A in (`bcdedit /enum %ANOTHER_WINDOWS_GUID% ^| findstr /i "description"`) do set "ANOTHER_OS_NAME=%%B"
+
+if "%ANOTHER_OS_NAME%"=="" (
+    echo Неправильно задана переменная окружения %%ANOTHER_WINDOWS_GUID%% %ANOTHER_WINDOWS_GUID%.
+    goto End
+)
+
+echo Перезагрузиться в %ANOTHER_OS_NAME%?
+choice /c YN /m "Нажмите Y для Да или N для Нет"
+
+if %errorlevel%==1 goto Yes
+if %errorlevel%==2 goto No
+
+:Yes
+echo Вы выбрали: ДА
+
+bcdedit /bootsequence %ANOTHER_WINDOWS_GUID%
 if errorlevel 1 (
-	echo Не удалось задать следующую систему. Проверьте GUID и права администратора.
-	pause
-	exit /b 1
+    echo Не удалось задать следующую систему. Проверьте GUID и права администратора.
+    pause
+    exit /b 1
 )
 shutdown /r /t 0
+
+goto End
+
+:No
+echo Вы выбрали: НЕТ
+goto End
+
+:End
+pause
+
 ```
