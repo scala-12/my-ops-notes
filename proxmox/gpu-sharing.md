@@ -28,8 +28,8 @@
     ```
 1. Отключить инициализацию видеокарты на хосте
     1. Найти ID GPU `lspci` вида `xx:xx`
-    1. Получить из команды `lspci -n -s xx:xx` ID вида `xxxx:xxxx`
-    1. Добавить в **/etc/modprobe.d/vfio.conf** строку `options vfio-pci ids=xxxx:xxxx,yyyy:yyyy disable_vga=1` с данными с прошлого шага
+    1. Скопировать из результата команды `lspci -n -s xx:xx` (ID GPU с предыдущего шага) ID вида `xxxx:xxxx`
+    1. Добавить в **/etc/modprobe.d/vfio.conf** строку `options vfio-pci ids=xxxx:xxxx,yyyy:yyyy disable_vga=1`, подставив данные с предыдущего шага
 1. Перезагрузить, проверить работу IOMMU
     - **Intel**: вывод `dmesg | grep -e DMAR -e IOMMU` содержит *IOMMU enabled*
     - **AMD**: вывод `dmesg | grep -e DMAR -e IOMMU -e AMD-Vi` содержит *interrupt remapping*
