@@ -26,7 +26,6 @@
     apt update
     apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     ```
-
 1. Установить **Open WebUI** в Docker
     ```bash
     docker run -d -p 3000:8080 \
@@ -36,5 +35,4 @@
         --restart always \
         ghcr.io/open-webui/open-webui:main
     ```
-
 1. Открыть Open WebUI (*:3000*), создать учетную запись администратора

@@ -1,38 +1,39 @@
 # Ollama
 
-## Ollama core install
+## Ubuntu 24.04
 
 1. Установить драйвера необходимые системные утилиты
     ```bash
     sudo apt install -y build-essential dkms linux-headers-generic
     ```
-1. Установить **Ollama** (Nvidia подтягиваются)
+1. [Установить Ollama](https://ollama.com/download/linux) (драйвера Nvidia подтягиваются)
     ```bash
     curl -fsSL https://ollama.com/install.sh | sh
     sudo reboot
-    ollama pull qwen3:4b # модель для теста
-    ollama pull deepseek-r1:8b # рассуждение и логика
-    ollama pull qwen2.5-coder:7b # для кода
-    ollama pull llama3.1 # эрудиция
-    ollama pull mistral-nemo # креативность
-    ollama pull phi4 # интеллект для текстов
-    ollama pull llama3-groq-tool-use # для phi4
     ```
-1. Разрешить подключение из сети к *Ollama*
-    ```bash
-    sudo systemctl edit ollama.service
-    ```
-    Добавить в пустом текстовом блоке:
-    ```ini
-    [Service]
-    Environment="OLLAMA_HOST=0.0.0.0"
-    ```
-    Применить настройки и перезапустить Ollama:
-    ```bash
-    sudo systemctl daemon-reload
-    sudo systemctl restart ollama
-    ```
-1. Включить **Firewall**, разрешить SSH, ограничить доступ к порту *Ollama*
+1. Скачать нужные модели командой `ollama pull модель`
+    - qwen3:4b - модель для теста
+    - deepseek-r1:8b - рассуждение и логика
+    - qwen2.5-coder:7b - для кода
+    - llama3.1 - эрудиция
+    - mistral-nemo - креативность
+    - phi4 - интеллект для текстов
+1. Разрешить подключение из сети к Ollama
+    1. Открыть конфигурацию
+        ```bash
+        sudo systemctl edit ollama.service
+        ```
+    1. Добавить в пустом текстовом блоке
+        ```ini
+        [Service]
+        Environment="OLLAMA_HOST=0.0.0.0"
+        ```
+    1. Применить настройки и перезапустить Ollama
+        ```bash
+        sudo systemctl daemon-reload
+        sudo systemctl restart ollama
+        ```
+1. Разрешить SSH, ограничить доступ к порту Ollama, включить Firewall
     ```bash
     sudo ufw allow ssh
     sudo ufw allow from 192.168.x.xx to any port 11434 proto tcp comment 'Разрешить Open WebUI'
@@ -40,15 +41,12 @@
     sudo ufw reload
     ```
 
-1. Для мониторинга видеокарты используется команда:
+### Для мониторинга видеокарты
+- Сводка
     ```bash
     watch -n 1 nvidia-smi
     ```
-    Для построения графиков:
-    ```bash
-    sudo apt install -y nvtop
-    nvtop
-    ```
+- Построение графиков: `nvtop` (необходимо установить).
 
 ## Web UI
 
