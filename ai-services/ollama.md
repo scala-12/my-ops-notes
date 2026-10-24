@@ -11,6 +11,23 @@
     curl -fsSL https://ollama.com/install.sh | sh
     sudo reboot
     ```
+1. **[Опционально]**: Модели можно хранить на отдельном диске
+    1. Создайте папку для моделей в заранее смонтированный диск и откройте параметры Ollama
+        ```bash
+        sudo mkdir -p /path/to/your/new/disk/ollama_models
+        sudo chown -R ollama:ollama /path/to/your/new/disk/ollama_models
+        sudo systemctl edit ollama.service
+        ```
+    1. Задайте новое расположение моделей (прочитайте комментарии в файле)
+        ```ini
+        [Service]
+        Environment="OLLAMA_MODELS=/path/to/your/new/disk/ollama_models"
+        ```
+    1. Перезапустите службу
+        ```bash
+        sudo systemctl daemon-reload
+        sudo systemctl restart ollama.service
+        ```
 1. Скачать нужные модели командой `ollama pull имя_модели`
     - qwen3:4b - модель для теста
     - deepseek-r1:8b - рассуждение и логика
@@ -23,7 +40,7 @@
         ```bash
         sudo systemctl edit ollama.service
         ```
-    1. Добавить в пустом текстовом блоке
+    1. Добавить в пустом текстовом блоке (прочитайте комментарии в файле)
         ```ini
         [Service]
         Environment="OLLAMA_HOST=0.0.0.0"
@@ -36,7 +53,7 @@
 1. Разрешить SSH, ограничить доступ к порту Ollama, включить Firewall
     ```bash
     sudo ufw allow ssh
-    sudo ufw allow from 192.168.x.xx to any port 11434 proto tcp comment 'Разрешить Open WebUI' # Указать нужный ip-адрес и комментарий
+    sudo ufw allow from 192.168.x.xx to any port 11434 proto tcp comment 'Разрешить Open WebUI' # Указать нужный ip-адрес (можно с маской) и комментарий
     sudo ufw deny 11434/tcp comment 'Блокировка внешнего доступа к Ollama API'
     sudo ufw reload
     ```

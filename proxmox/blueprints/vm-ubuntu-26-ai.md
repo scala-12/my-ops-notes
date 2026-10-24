@@ -31,6 +31,32 @@
     1. Выбрать меньший диск для установки, *Set up this disk as an LVM group*: `❌`.
     1. *Install OpenSSH server*: `✅`.
 1. Удалить ISO-образ Ubuntu из списка устройств, подключаться к VM по SSH.
+1. Подключить второй диск:
+    1. Найти диск командой `lsblk` (весьма вероятно, что **/dev/sdb**)
+    1. Создать файловую систему
+        ```bash
+        sudo mkfs.ext4 /dev/sdb
+        ```
+    1. Создать папку для монтирования:
+        ```bash
+        sudo mkdir -p /mnt/storage
+        sudo chown -R $USER:$USER /mnt/storage
+        ```
+    1. Настроить автоматическое монтирование диска:
+        1. Узнать идентификатор UUID
+            ```bash
+            sudo blkid /dev/sdb
+            ```
+        1. В файле **/etc/fstab** добавить строку, подставив значение с прошлого шага
+            ```ini
+            UUID=ваш-скопированный-uuid-сюда /mnt/storage ext4 defaults 0 2
+            ```
+    1. Обновить файл конфигурации и подключить диск
+        ```bash
+        sudo systemctl daemon-reload
+        sudo mount -a
+        df -h /mnt/storage
+        ```
 1. Обновить дистрибутив
     ```bash
     sudo apt update && sudo apt upgrade -y && sudo apt dist-upgrade -y
@@ -47,7 +73,7 @@
     ```bash
     sudo systemctl restart ssh
     ```
-1. **[Для Firewall]**: добавить правило `sudo ufw allow` с новым портом
+1. **[Для Firewall]**: добавить правило `sudo ufw allow` с новым портом, можно с указанием ip с маской
 
 
 ### PubkeyAuth
