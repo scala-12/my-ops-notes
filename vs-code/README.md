@@ -4,3 +4,4 @@
 
 1. [О настройках](about-settings.md)
 1. [Общие настройки](settings.md)
+1. [Настройки для нейросетей](ai-settings.md)
