@@ -108,4 +108,4 @@ ollama run имя_модели
     apt update
     apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     ```
-1. Установить *Open WebUI* через Docker
+1. Установить *Open WebUI* через Docker (Ссылка на инструкцию - выше)
