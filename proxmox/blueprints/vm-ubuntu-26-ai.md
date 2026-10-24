@@ -1,4 +1,6 @@
-# Установка Ubuntu 26.04 Server LTS
+# Ubuntu for AI services
+
+## Ubuntu 26.04 Server LTS
 
 1. Добавить ISO
 1. Создать VM
@@ -35,7 +37,7 @@
     sudo reboot
     ```
 
-## Настройка SSH
+## SSH
 
 1. В файле **/etc/ssh/sshd_config**
     - Сменить порт SSH: `Port новый_порт`.
@@ -48,7 +50,7 @@
 1. **[Для Firewall]**: добавить правило `sudo ufw allow` с новым портом
 
 
-### Вход по ключам
+### PubkeyAuth
 
 1. В файле **/etc/ssh/sshd_config** запретить вход по логину: `PasswordAuthentication no`
 1. Сгенерировать ключ на клиенте через *PuTTYgen*
