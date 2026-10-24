@@ -1,6 +1,6 @@
 # Ollama install and configuration
 
-## Ubuntu 24.04
+## Ubuntu 26.04
 
 1. Установить драйвера необходимые системные утилиты
     ```bash
