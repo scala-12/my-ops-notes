@@ -8,7 +8,7 @@
     - **System**:
         - Machine: `q35`
         - BIOS: `OVMF (UEFI)`
-        - Pre-Enroll Keys: `❌`
+        - Pre-Enroll Keys: `❌` (если ее включить, то при установке драйверов видеокарты надо поработать с MOK Manager)
         - Qemu Agent: `✅`
     - **Disk**:  Добавить два диска, 32 ГБ (система; *Backup*: `✅`) и 64 ГБ (модели; *Backup*: `❌`):
         - Cache: `Write back`
