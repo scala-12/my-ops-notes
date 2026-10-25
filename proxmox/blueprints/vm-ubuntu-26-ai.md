@@ -58,10 +58,12 @@
         df -h /mnt/storage
         ```
 1. Обновить дистрибутив
-    ```bash
-    sudo apt update && sudo apt upgrade -y && sudo apt dist-upgrade -y
-    sudo reboot
-    ```
+    - Проверить в файле **/etc/apt/sources.list.d/ubuntu.sources** строки с `Signed-by:` - они должны быть написаны в таком регистре; иначе возникнет ошибка.
+    - Выполнить код:
+        ```bash
+        sudo apt update && sudo apt upgrade -y && sudo apt dist-upgrade -y
+        sudo reboot
+        ```
 
 ## SSH
 
