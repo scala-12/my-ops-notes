@@ -101,7 +101,7 @@ ollama ps
 1. Создать контейнер (CT) *Debian 13*
 1. Обновить контейнер
      ```bash
-    apt update && sudo apt full-upgrade -y
+    apt update && apt full-upgrade -y
     reboot
     ```
 
