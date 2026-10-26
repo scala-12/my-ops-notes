@@ -1,4 +1,4 @@
-# Установка Ubuntu 24.04 Server LTS
+# Установка Ubuntu 26.04 Server LTS
 
 1. Добавить ISO
 1. Создать VM
