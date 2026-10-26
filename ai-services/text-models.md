@@ -4,8 +4,10 @@
 1. Google Gemini 2.5 Flash / Pro (через Google AI Studio)
     - до 1–2 млн токенов
     - для поиск багов по всему проекту, написание сложных фич
+
 1. Mistral Large 4 / Mistral Codestral (через Mistral la Plateforme)
     - отличный бесплатный уровень
+
 1. Встроенные бесплатные модели Cline (Cline Free Provider)
 
 ## Локальные модели
@@ -47,12 +49,13 @@
 
     Установить можно одним из способов:
     - Скачать как `hf.co/roleplaiapp/DeepSeek-R1-Distill-Qwen-14B-Q3_K_M-GGUF:Q3_K_M`, но контекст будет не ограничен - будет выгружаться в ОЗУ
-    - Добавить через сборку
+    - Добавить через сборку:
         1. Создать файл модели *Modelfile*
             ```dockerfile
             FROM hf.co/roleplaiapp/DeepSeek-R1-Distill-Qwen-14B-Q3_K_M-GGUF:Q3_K_M
             PARAMETER num_ctx 8192
             ```
+
         1. Собрать модель
             ```bash
             ollama create deepseek-r1:14b-qwen-distill-q3_K_M -f Modelfile
