@@ -1,6 +1,6 @@
 # Ollama install and configuration
 
-## Ubuntu 24.04
+## Ubuntu 26.04
 
 ### Установка Ollama
 
@@ -16,6 +16,26 @@
     nvidia-smi # покажет состояние видеокарты
     ```
 
+1. **[Опционально]**: Смена месторасположения моделей Ollama на заранее смонтированный диск
+    1. Создайте папку для моделей в заранее смонтированный диск и откройте параметры Ollama
+        ```bash
+        sudo mkdir -p /path/to/your/new/disk/ollama_models
+        sudo chown -R ollama:ollama /path/to/your/new/disk/ollama_models
+        sudo systemctl edit ollama.service
+        ```
+
+    1. Задайте новое расположение моделей (прочитайте комментарии в файле)
+        ```ini
+        [Service]
+        Environment="OLLAMA_MODELS=/path/to/your/new/disk/ollama_models"
+        ```
+
+    1. Перезапустите службу
+        ```bash
+        sudo systemctl daemon-reload
+        sudo systemctl restart ollama.service
+        ```
+
 1. Скачать [нужные модели](text-models.md) командой `ollama pull имя_модели`
 
 ### Настройка firewall и доступа
@@ -27,7 +47,7 @@
         sudo systemctl edit ollama.service
         ```
 
-    1. Добавить в пустом текстовом блоке:
+    1. Добавить в пустом текстовом блоке (внимание на комментарии в файле):
         ```ini
         [Service]
         Environment="OLLAMA_HOST=0.0.0.0"
@@ -42,7 +62,7 @@
 1. Разрешить SSH, ограничить доступ к порту Ollama, включить Firewall:
     ```bash
     sudo ufw allow ssh
-    sudo ufw allow from 192.168.x.xx to any port 11434 proto tcp comment 'Разрешить Open WebUI' # Указать нужный ip-адрес и комментарий
+    sudo ufw allow from 192.168.x.xx to any port 11434 proto tcp comment 'Разрешить Open WebUI' # Указать нужный ip-адрес (можно с маской) и комментарий
     sudo ufw deny 11434/tcp comment 'Блокировка внешнего доступа к Ollama API'
     sudo ufw reload
     ```
@@ -105,4 +125,4 @@ ollama ps
     apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     ```
 
-1. Установить *Open WebUI* через Docker
+1. Установить *Open WebUI* через Docker (Ссылка на инструкцию - выше)
