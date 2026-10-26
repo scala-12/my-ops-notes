@@ -29,20 +29,31 @@ ComfyUI — это современный инструмент для созда
     mv ./models /mnt/storage/models
     ```
 
-1. Создать виртуальное окружение:
-    - **Ubuntu 26**: На момент написания рекомендуется использовать Python 3.12. По умолчанию в Ubuntu 26 установлен 3.14. Поэтому придется установить виртуальное окружение нужной версии.
-        1. Установить *uv*:
-            ```bash
-            curl -LsSf https://astral.sh/uv/install.sh | sh
-            source ~/.profile # обновить сессию терминала
-            uv --version
-            ```
-        1. Создать в виртуальное окружение Python 3.12:
-            ```bash
-            uv venv --python 3.12
-            ```
-        1. Далее вместо вызова **pip** использовать `uv pip`
-    - **Ubuntu 24**: `python -m venv .venv`
+1. Создать виртуальное окружение: **На момент написания рекомендуется использовать Python 3.12**:
+
+    **Ubuntu 26**: По умолчанию в Ubuntu 26 установлен 3.14. Поэтому придется установить виртуальное окружение нужной версии.
+
+    1. Установить *uv*:
+        ```bash
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+        source ~/.profile # обновить сессию терминала
+        uv --version
+        ```
+
+    1. Создать в виртуальное окружение Python 3.12:
+        ```bash
+        uv venv --python 3.12
+        ```
+
+    1. Далее вместо вызова **pip** использовать `uv pip`
+
+    **Ubuntu 24**
+
+    1. Убедившись в версии Python, создать в виртуальное окружение:
+        ```bash
+        python -m venv .venv
+        ```
+
 1. Запустить виртуальное окружение:
     ```bash
     source .venv/bin/activate
@@ -52,11 +63,12 @@ ComfyUI — это современный инструмент для созда
     ```bash
     pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu130
     ```
-    - Проверьте, что PyTorch видит GPU (для CPU-установки результат `False` ожидаем):
 
-        ```bash
-        python -c "import torch; print('CUDA available:', torch.cuda.is_available()); print(torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU')"
-        ```
+    Проверьте, что PyTorch видит GPU (для CPU-установки результат `False` ожидаем):
+
+    ```bash
+    python -c "import torch; print('CUDA available:', torch.cuda.is_available()); print(torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU')"
+    ```
 
 1. Установить зависимости проекта:
     ```bash
@@ -96,26 +108,21 @@ ComfyUI — это современный инструмент для созда
 
 ### Настройка firewall и доступа
 
-1. Настройте firewall:
-    ```bash
-    sudo ufw allow ssh # или указать нужный
-    sudo ufw allow from 192.168.x.0/24 to any port 8188 proto tcp comment 'Доступ из локальной сети' # Указать подсеть
-    sudo ufw deny 8188/tcp comment 'Блокировка внешнего доступа'
-    sudo ufw reload
-    ```
+```bash
+sudo ufw allow ssh # или указать нужный
+sudo ufw allow from 192.168.x.0/24 to any port 8188 proto tcp comment 'Доступ из локальной сети' # Указать подсеть
+sudo ufw deny 8188/tcp comment 'Блокировка внешнего доступа'
+sudo ufw reload
+```
 
 ## Мониторинг видеокарты
 - Используйте `watch -n 1 nvidia-smi` для мониторинга состояния видеокарты.
 - Установите `nvtop` для визуализации использования GPU.
 
 ## Проверка после установки
-
-1. Выберите модель:
-    - Перейдите на вкладку "Templates" и выберите нужную модель.
-2. Скачайте и установите модели:
-    - Узнайте путь к модели и скачайте ее в соответствующую папку.
+1. *Выберите модель*: Перейдите на вкладку "Templates" и выберите нужную модель.
+1. *Скачайте и установите модели*: Узнайте путь к модели и скачайте ее в соответствующую папку.
 
 ## Sources
-
 - [ComfyUI: ручная установка](https://docs.comfy.org/installation/manual_install)
 - [ComfyUI: параметры запуска сервера](https://docs.comfy.org/development/comfyui-server/startup-flags)

@@ -2,33 +2,44 @@
 
 ## Ubuntu 24.04
 
-1. Установить драйвера необходимые системные утилиты
+### Установка Ollama
+
+1. Установить драйвера необходимые системные утилиты:
     ```bash
     sudo apt install -y build-essential dkms linux-headers-generic
     ```
-1. [Установить Ollama](https://ollama.com/download/linux) (драйвера Nvidia подтягиваются)
+
+1. [Установить Ollama](https://ollama.com/download/linux) (драйвера Nvidia подтягиваются):
     ```bash
     curl -fsSL https://ollama.com/install.sh | sh
     sudo reboot
+    nvidia-smi # покажет состояние видеокарты
     ```
-    - Проверить драйвера Nvidia командой `nvidia-smi`
+
 1. Скачать [нужные модели](text-models.md) командой `ollama pull имя_модели`
-1. Разрешить подключение из сети к Ollama
-    1. Открыть конфигурацию
+
+### Настройка firewall и доступа
+
+1. Разрешить подключение из сети к Ollama:
+
+    1. Открыть конфигурацию:
         ```bash
         sudo systemctl edit ollama.service
         ```
-    1. Добавить в пустом текстовом блоке
+
+    1. Добавить в пустом текстовом блоке:
         ```ini
         [Service]
         Environment="OLLAMA_HOST=0.0.0.0"
         ```
-    1. Применить настройки и перезапустить Ollama
+
+    1. Применить настройки и перезапустить Ollama:
         ```bash
         sudo systemctl daemon-reload
         sudo systemctl restart ollama
         ```
-1. Разрешить SSH, ограничить доступ к порту Ollama, включить Firewall
+
+1. Разрешить SSH, ограничить доступ к порту Ollama, включить Firewall:
     ```bash
     sudo ufw allow ssh
     sudo ufw allow from 192.168.x.xx to any port 11434 proto tcp comment 'Разрешить Open WebUI' # Указать нужный ip-адрес и комментарий
@@ -36,15 +47,9 @@
     sudo ufw reload
     ```
 
-### Мониторинг видеокарты
-- Сводка
-    ```bash
-    watch -n 1 nvidia-smi
-    ```
-- Построение графиков (необходима установка)
-    ```bash
-    nvtop
-    ```
+## Мониторинг видеокарты
+- Используйте `watch -n 1 nvidia-smi` для мониторинга состояния видеокарты.
+- Установите `nvtop` для визуализации использования GPU.
 
 ## Проверка после установки
 После установки запустить скачанную модель и запустить мониторинг видеокарты:
@@ -79,6 +84,7 @@ ollama ps
     apt update && sudo apt full-upgrade -y
     reboot
     ```
+
 1. Установить *Docker Engine*
     ```bash
     apt install -y ca-certificates curl
@@ -98,4 +104,5 @@ ollama ps
     apt update
     apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     ```
+
 1. Установить *Open WebUI* через Docker
