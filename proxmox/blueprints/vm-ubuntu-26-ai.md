@@ -14,7 +14,7 @@
     - **Disk**:
         - Storage: `Выбрать`
         - Disk size: `96GB`
-        - Cache: `Write back`
+        - Cache: `No cache` (надежно и быстро)
         - Discard: `✅`
         - IO thread: `✅`
         - SSD emulation: `✅`
