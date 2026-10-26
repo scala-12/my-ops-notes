@@ -11,6 +11,7 @@
     curl -fsSL https://ollama.com/install.sh | sh
     sudo reboot
     ```
+    - Проверить драйвера Nvidia командой `nvidia-smi`
 1. Скачать нужные модели командой `ollama pull имя_модели`
     - qwen3:4b - модель для теста
     - deepseek-r1:8b - рассуждение и логика
