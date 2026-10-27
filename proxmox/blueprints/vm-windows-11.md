@@ -11,7 +11,7 @@
     - **Disk**:
         - Выбрать Storage
         - Disk size: `64GB`
-        - Cache: `Write back`
+        - Cache: `No cache` (надежно и быстро)
         - Discard: `✅`
         - IO thread: `✅`
 
