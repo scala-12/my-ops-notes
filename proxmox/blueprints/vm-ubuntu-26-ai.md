@@ -12,12 +12,20 @@
         - Qemu Agent: `✅`
 
     - **Disk**:
+
+        Под систему:
         - Storage: `Выбрать`
-        - Disk size: `96GB`
+        - Disk size: `32 ГБ`
         - Cache: `No cache` (надежно и быстро)
         - Discard: `✅`
         - IO thread: `✅`
-        - SSD emulation: `✅`
+        - SSD emulation: `✅` (если SSD/NVMe)
+        - Backup: `✅`
+
+        Под модели выбрать такие же, как для основного диска, кроме:
+        - Storage: `Выбрать`
+        - Disk size: `120 ГБ`
+        - Backup: `❌` (бекап моделей не нужен)
 
     - **CPU**:
         - Cores: `реальное число ядер`
@@ -35,8 +43,8 @@
     - PCI-Express: `✅`
 
 1. Установить дистрибутив
-    1. Базовый вариант установки, не *minimized*.
-    1. *Set up this disk as an LVM group*: `❌`.
+    1. Базовый вариант установки, не `minimized`.
+    1. Выбрать диск для установки системы из ранее созданных: *Set up this disk as an LVM group*: `❌`.
     1. *Install OpenSSH server*: `✅`.
 
 1. Удалить ISO-образ Ubuntu из списка устройств, подключаться к VM по SSH.
