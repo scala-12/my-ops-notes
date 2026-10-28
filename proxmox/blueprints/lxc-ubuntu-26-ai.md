@@ -75,7 +75,7 @@
 1. Обновить конфигурацию SSH и перезагрузиться:
     ```bash
     sudo systemctl restart ssh
-    sudo reboot
+    sudo reboot # почему-то порт не обновляется до перезагрузки
     ```
 
 1. **[Windows]**: Настроить использование ключей в PuTTY
