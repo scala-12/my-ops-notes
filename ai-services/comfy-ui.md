@@ -11,10 +11,20 @@ ComfyUI — это современный инструмент для созда
 
 1. Установить драйверы NVIDIA и Git (*возможно нужны и libglx-mesa0 libglib2.0-0*):
     ```bash
-    sudo apt install -y ubuntu-drivers-common git
+    sudo apt install -y git curl
+    ```
+
+    Для VM дополнительно следует установить драйвера NVIDIA и драйвера для графического ускорения:
+
+    ```bash
+    sudo apt install -y ubuntu-drivers-common
     sudo ubuntu-drivers install
     sudo reboot
-    nvidia-smi # покажет состояние видеокарты
+    ```
+
+1. Проверить состояние видеокарты:
+    ```bash
+    nvidia-smi
     ```
 
 1. Клонировать репозиторий в домашнюю папку пользователя:
