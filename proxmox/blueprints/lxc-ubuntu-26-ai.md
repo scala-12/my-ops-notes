@@ -8,7 +8,7 @@
     - **General**:
         - Hostname: *Задать имя контейнера*
         - Uprivileged container: ✅ (для безопасности)
-        - Nesting: ✅ (если планируется использование Docker)
+        - Nesting: ✅
         - Template: *Выбрать шаблон*
 
     - **Disk**:
