@@ -11,10 +11,20 @@ ComfyUI — это современный инструмент для созда
 
 1. Установить драйверы NVIDIA и Git (*возможно нужны и libglx-mesa0 libglib2.0-0*):
     ```bash
-    sudo apt install -y ubuntu-drivers-common git
+    sudo apt install -y git curl
+    ```
+
+    Для VM дополнительно следует установить драйвера NVIDIA и драйвера для графического ускорения:
+
+    ```bash
+    sudo apt install -y ubuntu-drivers-common
     sudo ubuntu-drivers install
     sudo reboot
-    nvidia-smi # покажет состояние видеокарты
+    ```
+
+1. Проверить состояние видеокарты:
+    ```bash
+    nvidia-smi
     ```
 
 1. Клонировать репозиторий в домашнюю папку пользователя:
@@ -24,9 +34,14 @@ ComfyUI — это современный инструмент для созда
     cd ComfyUI
     ```
 
-1. [**Опционально**]: Перенос хранилища моделей на другой раздел; папка должна быть создана с нужными правами пользователем до этого шага:
+1. [**Опционально**] Перенос хранилища моделей на другой раздел:
+
+    Создайте папку для моделей, задайте права, чтобы  перенесите существующие модели и создайте символьную ссылку:
     ```bash
-    mv ./models /mnt/storage/models
+    sudo mkdir -p /path/to/your/models
+    sudo chown -R $USER:$USER /path/to/your/models
+    mv ./models /path/to/your/models
+    ln -s /path/to/your/models models
     ```
 
 1. Создать виртуальное окружение: **На момент написания рекомендуется использовать Python 3.12**:
@@ -89,7 +104,7 @@ ComfyUI — это современный инструмент для созда
     Type=simple
     User=ваш_юзер
     WorkingDirectory=/home/ваш_юзер/ComfyUI
-    ExecStart=/home/ваш_юзер/ComfyUI/venv/bin/python3 /home/ваш_юзер/ComfyUI/main.py --listen 0.0.0.0 --port 8188 --enable-manager
+    ExecStart=/home/ваш_юзер/ComfyUI/.venv/bin/python3 /home/ваш_юзер/ComfyUI/main.py --listen 0.0.0.0 --port 8188 --enable-manager
     Restart=always
     RestartSec=10
 
@@ -105,6 +120,8 @@ ComfyUI — это современный инструмент для созда
     sudo systemctl enable comfyui
     sudo systemctl start comfyui
     ```
+
+1. Приложение должно быть доступно по адресу `http://<IP>:8188`.
 
 ### Настройка firewall и доступа
 

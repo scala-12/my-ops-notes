@@ -1,5 +1,7 @@
 # Ubuntu 26.04 Server LTS for AI services with GPU-passthrow
 
+Не лучший вариант, потому что резервирует ОЗУ на хосте. Лучше использовать [LXC контейнер](./lxc-ubuntu-26-ai.md) с [шарингом видеокарты через хост](../gpu-use-cases.md#host-gpu-sharing).
+
 ## Preparing
 
 1. Добавить ISO
@@ -37,7 +39,7 @@
 
     - **Network**: Model `VirtIO (paravirtualized)`
 
-    Перед запуском [пробросить](../gpu-sharing.md#проброс-видеокарты-в-vm) видеокарту как *PCI Device*:
+    Перед запуском [пробросить](../gpu-sharing.md#gpu-passthrough) видеокарту как *PCI Device*:
     - All Functions: `✅`
     - ROM-Bar: `✅`
     - PCI-Express: `✅`
