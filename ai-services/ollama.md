@@ -7,6 +7,7 @@
 1. Установить драйвера необходимые системные утилиты:
     ```bash
     sudo apt install -y build-essential dkms linux-headers-generic
+    sudo apt install -y curl zstd   # для LXC контейнеров
     ```
 
 1. [Установить Ollama](https://ollama.com/download/linux) (драйвера Nvidia подтягиваются):
