@@ -13,7 +13,7 @@
 
     - **Disk**:
         - Storage: `Выбрать`
-        - Disk size: `20 ГБ`
+        - Disk size: `32 ГБ`
 
     - **CPU > Cores**: *Половину ядер*
     - **Memory**:
