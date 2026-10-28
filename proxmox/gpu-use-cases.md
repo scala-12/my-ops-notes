@@ -2,33 +2,39 @@
 
 ## GPU Passthrough
 
-1. Включить IOMMU в загрузчике для ЦП файл **/etc/default/grub**
+1. Добавить в загрузчик **/etc/default/grub** параметры для ЦП:
     - **Intel**: `GRUB_CMDLINE_LINUX_DEFAULT="quiet intel_iommu=on iommu=pt"`
     - **AMD**: `GRUB_CMDLINE_LINUX_DEFAULT="quiet amd_iommu=on iommu=pt"`
+
+    Параметр `iommu=pt` (Pass-Through) переводит систему в режим, когда процессор не трогает устройства и не тратит ресурсы на их виртуализацию, пока его об этом явно не попросят.
+
+    Параметр `intel_iommu=on` / `amd_iommu=on` активирует на уровне процессора технологию IOMMU (Intel VT-d / AMD-Vi).
 
 1. Обновить загрузчик
     ```bash
     update-grub
     ```
 
-1. Добавить модули vfio в файле **/etc/modules-load.d/vfio.conf**
+1. Добавить модули vfio в файле **/etc/modules-load.d/vfio.conf**:
     ```apacheconf
     vfio
     vfio_iommu_type1
     vfio_pci
     ```
 
-1. Импортировать модули
-    ```bash
-    update-initramfs -u -k all
-    ```
+    *VFIO* - это специальный "виртуальный сейф". Когда устройство попадает в этот сейф, обычная операционная система теряет к нему доступ, а гипервизор KVM получает возможность передать это устройство внутрь виртуальной машины «как есть».
 
-1. Запретить загрузку драйверов GPU (Nvidia и AMD) на хосте в файле **/etc/modprobe.d/pve-blacklist.conf**
+1. В файле **/etc/modprobe.d/pve-blacklist.conf** запретить на хосте загрузку драйверов GPU (Nvidia и AMD):
     ```apacheconf
     blacklist nouveau
     blacklist nvidia*
     blacklist amdgpu
     blacklist radeon
+    ```
+
+1. Импортировать модули
+    ```bash
+    update-initramfs -u -k all
     ```
 
 1. Отключить инициализацию видеокарты на хосте
