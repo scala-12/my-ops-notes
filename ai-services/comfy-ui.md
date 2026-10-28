@@ -89,7 +89,7 @@ ComfyUI — это современный инструмент для созда
     Type=simple
     User=ваш_юзер
     WorkingDirectory=/home/ваш_юзер/ComfyUI
-    ExecStart=/home/ваш_юзер/ComfyUI/venv/bin/python3 /home/ваш_юзер/ComfyUI/main.py --listen 0.0.0.0 --port 8188 --enable-manager
+    ExecStart=/home/ваш_юзер/ComfyUI/.venv/bin/python3 /home/ваш_юзер/ComfyUI/main.py --listen 0.0.0.0 --port 8188 --enable-manager
     Restart=always
     RestartSec=10
 
