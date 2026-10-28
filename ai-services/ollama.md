@@ -18,7 +18,7 @@
     ```
 
 1. **[Опционально]**: Смена месторасположения моделей Ollama на заранее смонтированный диск
-    1. Создайте папку для моделей в заранее смонтированный диск и откройте параметры Ollama
+    1. Создайте папку для моделей, задайте права и откройте параметры Ollama:
         ```bash
         sudo mkdir -p /path/to/your/new/disk/ollama_models
         sudo chown -R ollama:ollama /path/to/your/new/disk/ollama_models
@@ -60,9 +60,11 @@
         sudo systemctl restart ollama
         ```
 
-1. Разрешить SSH, ограничить доступ к порту Ollama, включить Firewall:
+1. Ограничить доступ к порту Ollama, включить Firewall:
+
+    Убедитесь, что порт SSH уже добавлен в правила.
+
     ```bash
-    sudo ufw allow ssh
     sudo ufw allow from 192.168.x.xx to any port 11434 proto tcp comment 'Разрешить Open WebUI' # Указать нужный ip-адрес (можно с маской) и комментарий
     sudo ufw deny 11434/tcp comment 'Блокировка внешнего доступа к Ollama API'
     sudo ufw reload
