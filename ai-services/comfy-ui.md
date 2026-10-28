@@ -9,9 +9,9 @@ ComfyUI — это современный инструмент для созда
 
 ### Установка
 
-1. Установить драйверы NVIDIA и Git (*возможно нужны и libglx-mesa0 libglib2.0-0*):
+1. Установить необходимые утилиты:
     ```bash
-    sudo apt install -y git curl
+    sudo apt update && sudo apt install -y git curl build-essential
     ```
 
     Для VM дополнительно следует установить драйвера NVIDIA и драйвера для графического ускорения:
