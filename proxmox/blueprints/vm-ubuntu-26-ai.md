@@ -37,7 +37,7 @@
 
     - **Network**: Model `VirtIO (paravirtualized)`
 
-    Перед запуском [пробросить](../gpu-sharing.md#проброс-видеокарты-в-vm) видеокарту как *PCI Device*:
+    Перед запуском [пробросить](../gpu-sharing.md#gpu-passthrough) видеокарту как *PCI Device*:
     - All Functions: `✅`
     - ROM-Bar: `✅`
     - PCI-Express: `✅`

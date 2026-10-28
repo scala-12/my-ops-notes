@@ -1,6 +1,6 @@
 # Proxmox VE GPU sharing
 
-## Проброс видеокарты в VM
+## GPU Passthrough
 
 1. Включить IOMMU в загрузчике для ЦП файл **/etc/default/grub**
     - **Intel**: `GRUB_CMDLINE_LINUX_DEFAULT="quiet intel_iommu=on iommu=pt"`
