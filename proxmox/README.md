@@ -8,3 +8,4 @@
 1. [Интеграция в Home Assistant](haos-integration.md)
 1. [Сниппеты](snippets/README.md)
 1. [Полезные утилиты](utils.md)
+1. [Работа с дисками](disk-utils.md)
