@@ -18,7 +18,6 @@
     ```
 
     - Для создания dataset используется команда `zfs create tank/directory`
-    - Для монтирования в другое место можно использовать `zfs set mountpoint=/srv/directory tank/directory`
     - Для удаления пула используется команда `zpool destroy tank/directory`
 
 ## dataset
