@@ -4,12 +4,11 @@
 
 ## Preparing
 
-1. Добавить Container template.
-1. Создать LXC:
+1. Создать LXC с учетом рекомендаций из [записи](README.md#lxc-remarks):
     - **General**:
         - Hostname: samba
-        - Uprivileged container: ✅ (для безопасности)
-        - Nesting: ✅ (Debian 13 ругается, если не включить)
+        - Uprivileged container: ✅
+        - Nesting: ✅
         - Template: *шаблон Debian 13*
 
     - **Disk**:
