@@ -9,7 +9,7 @@
     - **General**:
         - Hostname: samba
         - Uprivileged container: ✅ (для безопасности)
-        - Nesting: ❌
+        - Nesting: ✅ (Debian 13 ругается, если не включить)
         - Template: *шаблон Debian 13*
 
     - **Disk**:
