@@ -11,7 +11,7 @@
     - **Disk**:
         - Выбрать Storage
         - Disk size: `64GB`
-        - Cache: `Write back`
+        - Cache: `No cache` (надежно и быстро)
         - Discard: `✅`
         - IO thread: `✅`
 
@@ -23,7 +23,7 @@
     - **Network**: Model `VirtIO (paravirtualized)`
 
     - **[Для работы через видеокарту]** перед запуском
-        - [Пробросить видеокарту](../gpu-sharing.md#проброс-видеокарты-в-vm) как *PCI Device*
+        - [Пробросить видеокарту](../gpu-use-cases.md#gpu-passthrough) как *PCI Device*
             - All Functions: `✅`
             - ROM-Bar: `✅`
             - PCI-Express: `✅`
