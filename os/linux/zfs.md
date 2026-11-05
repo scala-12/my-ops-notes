@@ -38,7 +38,3 @@ df -h /mnt/pve/directory        # Если указали точку монти�
 ```bash
 zfs set mountpoint=/mnt/directory tank/directory
 ```
-
-Созданный dataset можно использовать как хранилище **Directory**:
-1. В интерфейсе выбрать **Datacenter > Storage > Add > Directory**
-1. Указать путь к *dataset*.
