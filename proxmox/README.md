@@ -37,5 +37,4 @@
     - [Увеличение размера диска](disk-utils.md#resize-disk)
     - [Монтирование диска](disk-utils.md#mount-disk)
     - [Шаринг диска между VM](disk-utils.md#share-disk)
-    - [Остановка шпинделя по таймауту](disk-utils.md#disk-stanby-by-timeout)
     - [Подключение ZFS датасета как Directory](disk-utils.md#using-zfs-dataset-as-directory)
