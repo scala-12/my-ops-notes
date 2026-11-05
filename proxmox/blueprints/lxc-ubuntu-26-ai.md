@@ -43,42 +43,4 @@
     ethtool -K eth0 tx off rx off gso off tso off gro off
     ```
 
-1. Настроить SSH:
-
-    В файле **/etc/ssh/sshd_config**
-    - Сменить порт SSH: `Port новый_порт`.
-    - Разрешить вход под root: `PermitRootLogin yes` (у контейнера базовый пользователь root)
-    - Разрешить вход по ключу: `PubkeyAuthentication yes`
-    - Запретить вход по логину: `PasswordAuthentication no`
-
-1. Добавить правила Firewall с новым портом SSH (в примере `2222` и подсеть 192.168.1.0/24):
-    ```bash
-    sudo ufw allow from 192.168.1.0/24 to any port 2222 proto tcp comment 'SSH из локальной'
-    sudo ufw deny 2222/tcp comment 'Блокировка внешнего SSH'
-    ```
-
-1. Сгенерировать ключ на клиенте через *PuTTYgen*, если его еще нет.
-
-    **Windows**
-
-    - *Тип ключа* `EdDSA Ed25519`
-    - Generate
-    - Сохранить поле *Public key for pasting* в файл для сервера
-    - Сохранить ключи как **id_ed25519** с соответствующими расширениями
-
-1. Скопировать *Public key for pasting* в **~/.ssh/authorized_keys** на сервере
-1. Задать правильные права
-    ```bash
-    chmod 700 ~/.ssh && chmod 600 ~/.ssh/authorized_keys && chown -R $USER:$USER ~/.ssh
-    ```
-
-1. Обновить конфигурацию SSH и перезагрузиться:
-    ```bash
-    sudo systemctl restart ssh
-    sudo reboot # почему-то порт не обновляется до перезагрузки
-    ```
-
-1. **[Windows]**: Настроить использование ключей в PuTTY
-    1. **Connection → SSH → Auth → Credentials**: выбрать ранее сгенерированный *Private key file*
-    1. **Session**: Ввести адрес/порт и название, сохранить конфигурацию
-    1. Подключиться
+1. [Настроить SSH](../../os/linux/ssh-settings.md)
