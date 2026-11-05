@@ -67,8 +67,7 @@
 
 1. Ограничить доступ к порту Ollama, включить Firewall:
 
-    Убедитесь, что порт SSH уже добавлен в правила.
-
+    **При использовании SSH**: Перед включением *firewall* удостовериться, что [настройки SSH](../os/linux/ssh-settings.md#настройка-firewall) корректны.
     ```bash
     sudo ufw allow from 192.168.x.xx to any port 11434 proto tcp comment 'Разрешить Open WebUI' # Указать нужный ip-адрес (можно с маской) и комментарий
     sudo ufw deny 11434/tcp comment 'Блокировка внешнего доступа к Ollama API'

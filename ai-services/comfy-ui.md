@@ -120,8 +120,8 @@ ComfyUI — это современный инструмент для созда
 
 ## Настройка firewall и доступа
 
+**При использовании SSH**: Перед включением *firewall* удостовериться, что [настройки SSH](../os/linux/ssh-settings.md#настройка-firewall) корректны.
 ```bash
-sudo ufw allow ssh # или указать нужный
 sudo ufw allow from 192.168.x.0/24 to any port 8188 proto tcp comment 'Доступ из локальной сети' # Указать подсеть
 sudo ufw deny 8188/tcp comment 'Блокировка внешнего доступа'
 sudo ufw reload
