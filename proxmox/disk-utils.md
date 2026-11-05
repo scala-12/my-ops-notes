@@ -134,3 +134,9 @@
     systemctl status hdd-spindown.service   # Проверить статус
     journalctl -u hdd-spindown.service      # Журнал сервиса
     ```
+
+## Using ZFS dataset as directory
+
+ZFS dataset можно использовать как хранилище **Directory**:
+1. В интерфейсе выбрать **Datacenter > Storage > Add > Directory**
+1. Указать путь к *dataset*.
