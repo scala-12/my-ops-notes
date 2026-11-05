@@ -1,12 +1,18 @@
 # Ollama install and configuration
 
-## Ubuntu 26.04
+*В данной инструкции используется дистрибутив Ubuntu 26.04.*
 
-### Установка Ollama
+## Установка Ollama
 
 1. Установить драйвера необходимые системные утилиты:
     ```bash
     sudo apt install -y build-essential dkms linux-headers-generic
+    ```
+
+    При использовании LXC необходимо установить дополнительные пакеты:
+
+    ```bash
+    sudo apt install -y curl zstd
     ```
 
 1. [Установить Ollama](https://ollama.com/download/linux) (драйвера Nvidia подтягиваются):
@@ -17,7 +23,7 @@
     ```
 
 1. **[Опционально]**: Смена месторасположения моделей Ollama на заранее смонтированный диск
-    1. Создайте папку для моделей в заранее смонтированный диск и откройте параметры Ollama
+    1. Создайте папку для моделей, задайте права и откройте параметры Ollama:
         ```bash
         sudo mkdir -p /path/to/your/new/disk/ollama_models
         sudo chown -R ollama:ollama /path/to/your/new/disk/ollama_models
@@ -38,7 +44,7 @@
 
 1. Скачать [нужные модели](text-models.md) командой `ollama pull имя_модели`
 
-### Настройка firewall и доступа
+## Настройка firewall и доступа
 
 1. Разрешить подключение из сети к Ollama:
 
@@ -59,17 +65,14 @@
         sudo systemctl restart ollama
         ```
 
-1. Разрешить SSH, ограничить доступ к порту Ollama, включить Firewall:
+1. Ограничить доступ к порту Ollama, включить Firewall:
+
+    **При использовании SSH**: Перед включением *firewall* удостовериться, что [настройки SSH](../os/linux/ssh-settings.md#настройка-firewall) корректны.
     ```bash
-    sudo ufw allow ssh
     sudo ufw allow from 192.168.x.xx to any port 11434 proto tcp comment 'Разрешить Open WebUI' # Указать нужный ip-адрес (можно с маской) и комментарий
     sudo ufw deny 11434/tcp comment 'Блокировка внешнего доступа к Ollama API'
     sudo ufw reload
     ```
-
-## Мониторинг видеокарты
-- Используйте `watch -n 1 nvidia-smi` для мониторинга состояния видеокарты.
-- Установите `nvtop` для визуализации использования GPU.
 
 ## Проверка после установки
 После установки запустить скачанную модель и запустить мониторинг видеокарты:
@@ -77,6 +80,10 @@
 ```bash
 ollama run имя_модели
 ```
+
+Для мониторинга видеокарты использовать следующие команды:
+- Используйте `watch -n 1 nvidia-smi` для мониторинга состояния видеокарты.
+- Установите `nvtop` для визуализации использования GPU.
 
 Если при запросе к модели видеокарта нагружается, то все работает верно.
 
