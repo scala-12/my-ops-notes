@@ -46,7 +46,9 @@ sudo systemctl is-enabled ufw   # проверка включен ли Firewall 
     - Скопировать *Public key for pasting* для следующего шага
 
 1. <span id="add-pubkey-to-server">Добавить public-ключ в файл **~/.ssh/authorized_keys** на сервере</span>
-1. Задать правильные права:
+
+    Если файл не существовал, то добавить правильные права:
+
     ```bash
     chmod 700 ~/.ssh && chmod 600 ~/.ssh/authorized_keys && chown -R $USER:$USER ~/.ssh
     ```
