@@ -11,6 +11,17 @@
     - Разрешить вход по ключу: `PubkeyAuthentication yes`
     - Запретить вход по логину при использовании PubkeyAuth (_рекомендуется_): `PasswordAuthentication no`
 
+1. При использовании `ssh.socket` и изменении порта SSH нужно добавить указанть новый порт `ListenStream=новый_порт` в конфигурации:
+     ```bash
+     systemctl edit ssh.socket
+     ```
+
+    После требуется перезагрузить сервис:
+    ```bash
+    sudo systemctl daemon-reload
+    sudo systemctl restart ssh.socket
+    ```
+
 1. <span id="apply-ssh-config">Обновить конфигурацию SSH и перезагрузиться</span>:
 
     **Не обновлять конфигурацию, пока не** [добавлен public-ключ на сервер](#add-pubkey-to-server) и не [добавлен порт в Firewall](#ufw) (при его использовании).
