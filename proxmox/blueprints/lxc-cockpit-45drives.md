@@ -113,10 +113,7 @@
     - `nas-ro` - чтение через Samba.
     - `nas-rw` - чтение и запись через Samba.
 
-1. Создать пользователей:
-
-    Для работы в Cockit:
-
+1. Создать пользователя для работы в Cockit:
     ```bash
     adduser cockpitadmin
     usermod -aG nas-admin,sudo cockpitadmin
