@@ -18,6 +18,8 @@
 
 ## Настройка Firewall
 
+### UFW
+
 Добавить правила Firewall с новым портом SSH (в примере `2222` и подсеть 192.168.1.0/24):
 ```bash
 sudo ufw limit from 192.168.1.0/24 to any port 2222 proto tcp comment 'SSH из локальной'
