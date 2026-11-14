@@ -2,19 +2,23 @@
 
 ## Конфигурация SSH
 
-В файле **/etc/ssh/sshd_config**
-- Сменить порт SSH: `Port новый_порт`.
-- Запретить вход под root: `PermitRootLogin no`
-    - При использовании LXC необходимо разрешить вход под root как для базового пользователя:
+1. В файле **/etc/ssh/sshd_config** настроить следующие параметры:
+    - Сменить порт SSH: `Port новый_порт`.
+    - Запретить вход под root: `PermitRootLogin no`
 
-        `PermitRootLogin yes`
+        При использовании LXC необходимо разрешить вход под root как для базового пользователя: `PermitRootLogin yes`
 
-- Разрешить вход по ключу: `PubkeyAuthentication yes`
-- Запретить вход по логину при использовании PubkeyAuth (рекомендуется):
+    - Разрешить вход по ключу: `PubkeyAuthentication yes`
+    - Запретить вход по логину при использовании PubkeyAuth (_рекомендуется_): `PasswordAuthentication no`
 
-    `PasswordAuthentication no`
+1. <span id="apply-ssh-config">Обновить конфигурацию SSH и перезагрузиться</span>:
 
-**Не обновлять конфигурацию, пока не [добавлен ключ на сервер](#настройка-ssh-клиентов) и не добавлен порт в Firewall (при его использовании).**
+    **Не обновлять конфигурацию, пока не** [добавлен public-ключ на сервер](#add-pubkey-to-server) и не [добавлен порт в Firewall](#ufw) (при его использовании).
+
+    ```bash
+    sudo systemctl restart ssh
+    sudo reboot # почему-то порт не обновляется до перезагрузки
+    ```
 
 ## Настройка Firewall
 
@@ -53,11 +57,7 @@ sudo systemctl is-enabled ufw   # проверка включен ли Firewall 
     chmod 700 ~/.ssh && chmod 600 ~/.ssh/authorized_keys && chown -R $USER:$USER ~/.ssh
     ```
 
-1. Обновить конфигурацию SSH и перезагрузиться:
-    ```bash
-    sudo systemctl restart ssh
-    sudo reboot # почему-то порт не обновляется до перезагрузки
-    ```
+1. [Обновить конфигурацию SSH](#apply-ssh-config).
 
 1. Подключение к серверу по SSH:
 
