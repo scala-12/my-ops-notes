@@ -93,6 +93,15 @@
 
     Это устанавливает `файловый менеджер`, `управление ресурсами`, `управление пользователями` соответственно.
 
+1. При использовании Firewall открыть порты:
+    ```bash
+    sudo ufw allow from 192.168.1.0/24 to any port 445 proto tcp comment 'Доступ к файлам из локальной сети'
+    sudo ufw deny 445/tcp comment 'Блокировка внешнего доступа к файлам'
+
+    sudo ufw allow from 192.168.1.0/24 to any port 9090 proto tcp comment 'Доступ к консоли из локальной сети'
+    sudo ufw deny 9090/tcp comment 'Блокировка внешнего к консоли'
+    ```
+
 1. Создать группы пользователей:
     ```bash
     groupadd -g 2001 nas-ro
@@ -104,10 +113,7 @@
     - `nas-ro` - чтение через Samba.
     - `nas-rw` - чтение и запись через Samba.
 
-1. Создать пользователей:
-
-    Для работы в Cockit:
-
+1. Создать пользователя для работы в Cockit:
     ```bash
     adduser cockpitadmin
     usermod -aG nas-admin,sudo cockpitadmin
