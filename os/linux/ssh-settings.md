@@ -26,7 +26,7 @@ sudo ufw limit from 192.168.1.0/24 to any port 2222 proto tcp comment 'SSH из 
 sudo ufw deny 2222/tcp comment 'Блокировка внешнего SSH'
 ```
 - `limit` - ограничить количество подключений с одного IP-адреса в минуту. Если лимит не нужен, то использовать `allow`.
-- **Не применять правила до [добавления ключа на сервер](#настройка-ssh-клиентов), иначе подключение будет невозможно.**
+- **Не применять правила, пока не** [добавлен public-ключ на сервер](#add-pubkey-to-server), иначе подключение будет невозможно.
 
 После добавления ключа на сервер, можно применять правила:
 ```bash
@@ -45,7 +45,7 @@ sudo systemctl is-enabled ufw   # проверка включен ли Firewall 
     - Сохранить ключи как **id_ed25519** с соответствующими расширениями
     - Скопировать *Public key for pasting* для следующего шага
 
-1. Добавить public-ключ в файл **~/.ssh/authorized_keys** на сервере
+1. <span id="add-pubkey-to-server">Добавить public-ключ в файл **~/.ssh/authorized_keys** на сервере</span>
 1. Задать правильные права:
     ```bash
     chmod 700 ~/.ssh && chmod 600 ~/.ssh/authorized_keys && chown -R $USER:$USER ~/.ssh
