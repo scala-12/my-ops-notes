@@ -1,6 +1,6 @@
 # Block VM/LXC before running
 
-1. Создать сниппет `block_together.pl` с указанием id контейнеров для проверки *@all_vms*
+1. Создать сниппет `block_together.pl` с указанием _id контейнеров_ для проверки (переменная *@all_vms*)
     ```perl
     #!/usr/bin/perl
 
@@ -40,13 +40,5 @@
 
     exit 0;
     ```
-1. Установить права
-    ```bash
-    chmod +x /var/lib/pve/local-bpc/snippets/block_together.pl
-    ```
-1. Привязать скрипт к машинам по id
-    ```bash
-    qm set 101 --hookscript local:snippets/block_together.pl
-    qm set 102 --hookscript local:snippets/block_together.pl
-    qm set 103 --hookscript local:snippets/block_together.pl
-    ```
+
+1. Установить права на скрипт и привязать скрипт к каждой машине (в примере 101, 102, 103) по id в соответствии с [памяткой](README.md#памятка)
