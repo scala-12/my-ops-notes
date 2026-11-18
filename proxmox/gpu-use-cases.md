@@ -1,6 +1,15 @@
 # Proxmox VE GPU sharing
 
+1. [Проброс видеокарты в виртуальную машину](#gpu-passthrough)
+1. [Шаринг видеокарты с хоста в контейнер](#host-gpu-sharing)
+
+---
+
 ## GPU Passthrough
+
+- [Откат изменений](#revert-passthrough)
+
+---
 
 1. Добавить в загрузчик **/etc/default/grub** параметры для ЦП:
     - **Intel**: `GRUB_CMDLINE_LINUX_DEFAULT="quiet intel_iommu=on iommu=pt"`
@@ -53,6 +62,8 @@
 
     *Primary GPU* используется для вывода изображения через это устройство (скорее всего, нужно отключить видеокарту в настройках VM).
 
+---
+
 ### Revert passthrough
 
 Для отмены блокировки видеокарты нужно откатить часть внесенных изменений:
@@ -64,11 +75,19 @@
 1. В файле **/etc/modprobe.d/vfio.conf** закомментировать добавленную строку.
 1. Перезагрузить систему.
 
+---
+
 ## Host GPU sharing
+
+1. [Настройки на хосте](#host-settings)
+1. [Настройки в контейнере](#container-settings)
+1. [Откат изменений](#revert-sharing)
+
+---
 
 ### Host settings
 
-1. Отменить [GPU-passthrough](#revert-passthrough)
+1. Отменить [блокировку видеокарты](#revert-passthrough)
 1. Установить необходимые программы:
     ```bash
     apt install build-essential pve-headers-$(uname -r) python3
@@ -133,6 +152,8 @@
     ```
 
     , где `44` и `993` - GID групп *video* и *render*.
+
+---
 
 ### Container settings
 
@@ -199,6 +220,8 @@
     В контейнере для запуска требуется выставить права `chmod +x`.
 
 **Никогда не обновляйте драйвер NVIDIA внутри контейнера отдельно от хоста.**
+
+---
 
 ### Revert sharing
 

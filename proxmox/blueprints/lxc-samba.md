@@ -1,10 +1,14 @@
 # LXC with SAMBA
 
 *В примере будет использоваться **Debian 13**.*
+1. [Подготовка](#preparing)
+1. [Настройка](#settings)
+
+---
 
 ## Preparing
 
-1. Создать LXC с учетом рекомендаций из [записи](README.md#lxc-remarks):
+1. Создать LXC с учетом рекомендаций из [записи](README.md#о-lxc):
     - **General**:
         - Hostname: samba
         - Uprivileged container: ✅

@@ -1,5 +1,12 @@
 # Disk utils
 
+1. [Изменение размера диска](#resize-disk)
+1. [Монтирование диска](#mount-disk)
+1. [Шаринг диска между VM](#share-disk)
+1. [Подключение ZFS датасета как Directory](#using-zfs-dataset-as-directory)
+
+---
+
 ## Resize disk
 
 Проверялось только на Ubuntu.
