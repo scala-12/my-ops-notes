@@ -1,5 +1,9 @@
 # Disk utils
 
+1. [Остановка шпинделя по таймауту](#disk-stanby-by-timeout)
+
+---
+
 ## Disk Stanby by timeout
 
 `hdparm` — это классическая утилита командной строки для Linux, предназначенная для просмотра и настройки параметров HDD и SSD с интерфейсом ATA/SATA/SAS.

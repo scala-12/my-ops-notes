@@ -1,5 +1,10 @@
 # ZFS guide
 
+1. [Создать ZFS-пулл](#zfs-pool-creation)
+1. [Создать ZFS-датасет](#dataset)
+
+---
+
 ## ZFS Pool creation
 
 1. Создать пул ZFS с зеркальной конфигурацией:
@@ -20,7 +25,7 @@
     - Для создания dataset используется команда `zfs create tank/directory`
     - Для удаления пула используется команда `zpool destroy tank/directory`
 
-## dataset
+## Dataset
 
 Создать dataset можно командой:
 ```bash

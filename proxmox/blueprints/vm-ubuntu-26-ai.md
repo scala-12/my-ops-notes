@@ -1,5 +1,10 @@
 # Ubuntu 26.04 Server LTS for AI services with GPU-passthrow
 
+1. [Подготовка](#preparing)
+1. [Настройка](#settings)
+
+---
+
 Не лучший вариант, потому что резервирует ОЗУ на хосте. Лучше использовать [LXC контейнер](./lxc-ubuntu-26-ai.md) с [шарингом видеокарты через хост](../gpu-use-cases.md#host-gpu-sharing).
 
 ## Preparing
