@@ -3,6 +3,8 @@
 *В примере будет использоваться **Debian 13**.*
 1. [Подготовка](#preparing)
 1. [Настройка](#settings)
+    - [Подключить каталоги в контейнер](#mount-dirs)
+    - [Настройка прав доступа](#set-acl)
 
 ---
 
@@ -139,45 +141,44 @@
         ```
 
 1. На хосте:
+    1. Установить пакет `acl`:
+        ```bash
+        apt install acl -y
+        ```
 
-    Подключить необходимые каталоги в контейнер командой:
-    ```bash
-    pct set 120 -mp0 /mnt/storage,mp=/srv/storage
-    ```
+    1. <span id="mount-dirs">Подключить необходимые каталоги в контейнер</span> командой:
+        ```bash
+        pct set 120 -mp0 /mnt/storage,mp=/srv/storage
+        pct set 120 -mp1 /mnt/readonly,mp=/mnt/readonly
+        ```
 
-    *где `120` - номер контейнера, `-mp0` - номер точки монтирования, `/mnt/storage` - каталог на хосте, `/srv/storage` - каталог в контейнере.*
+        *где `120` - номер контейнера, `-mp0` - номер точки монтирования, `/mnt/storage` - каталог на хосте, `/srv/storage` - каталог в контейнере.*
 
-    Установить пакет `acl`:
+    1. <span id="set-acl">Настроить права доступа для Samba</span>:
 
-    ```bash
-    apt install acl -y
-    ```
+        Если вы строго следовали инструкции, то `101000` - это UID `1000` пользователя *cockpitadmin* (добавление 10 перед внутренним UID), аналогичная ситуация с группами `2001`, `2002` и `2003`.
 
-    Дать права Samba на чтение каталогов (readonly):
+        - Только чтение:
+            ```bash
+            setfacl -m \
+                u:101000:rwx,g:102003:rwx,g:102001:r-x \
+                /mnt/readonly
 
-    ```bash
-    setfacl -m \
-        u:101000:rwx,g:102003:rwx,g:102001:r-x \
-        /mnt/readonly
+            setfacl -m \
+                d:u::rwx,d:g::r-x,d:g:102003:rwx,d:g:102001:r-x,d:m::rwx,d:o::--- \
+                /mnt/readonly
+            ```
 
-    setfacl -m \
-        d:u::rwx,d:g::r-x,d:g:102003:rwx,d:g:102001:r-x,d:m::rwx,d:o::--- \
-        /mnt/readonly
-    ```
+        - Чтение и запись:
+            ```bash
+            setfacl -m \
+                u:101000:rwx,g:102003:rwx,g:102001:r-x,g:102002:rwx \
+                /mnt/storage
 
-    Дать права Samba на чтение и запись:
-
-    ```bash
-    setfacl -m \
-        u:101000:rwx,g:102003:rwx,g:102001:r-x,g:102002:rwx \
-        /mnt/storage
-
-    setfacl -m \
-        d:u::rwx,d:g::r-x,d:g:102003:rwx,d:g:102001:r-x,d:g:102002:rwx,d:m::rwx,d:o::--- \
-        /mnt/storage
-    ```
-
-    - `101000` - это UID `1000` пользователя *cockpitadmin*, если вы следовали инструкции. Иначе используйте свой UID.
+            setfacl -m \
+                d:u::rwx,d:g::r-x,d:g:102003:rwx,d:g:102001:r-x,d:g:102002:rwx,d:m::rwx,d:o::--- \
+                /mnt/storage
+            ```
 
 1. Открыть Cockpit в браузере по ссылке `https://<ip>:9090`:
 
