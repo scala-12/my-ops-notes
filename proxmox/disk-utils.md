@@ -4,6 +4,7 @@
 1. [Монтирование диска](#mount-disk)
 1. [Шаринг диска между VM](#share-disk)
 1. [Подключение ZFS датасета как Directory](#using-zfs-dataset-as-directory)
+1. [Настройка общего доступа к файлам для Samba](#samba-settings)
 
 ---
 
@@ -88,3 +89,102 @@
 ZFS dataset можно использовать как хранилище **Directory**:
 1. В интерфейсе выбрать **Datacenter > Storage > Add > Directory**
 1. Указать путь к *dataset*.
+
+## Samba settings
+
+- [Настройки в контейнере](#настройки-samba-в-контейнере)
+- [Настройки на хосте](#настройки-samba-на-хосте)
+
+---
+
+### Настройки Samba в контейнере
+
+Для работы с ACL необходимо предварительно установить пакет `acl`.
+
+- [Создать группы пользователей](#create-groups-users-for-samba)
+- [Настройка конфига Samba](#set-samba-settings)
+
+    ---
+
+1. <span id="create-groups-users-for-samba">Создать группы пользователей</span>:
+    ```bash
+    groupadd -g 2001 nas-ro
+    groupadd -g 2002 nas-rw
+    groupadd -g 2003 nas-admin
+    ```
+
+    - `nas-admin` - управление файлами (к примеру, через Cockpit).
+
+        Если сделали это, то необходимо создать такого пользователя и добавить его в группу:
+        ```bash
+        adduser cockpitadmin
+        usermod -aG nas-admin,sudo cockpitadmin
+        ```
+
+    - `nas-ro` - чтение через Samba.
+    - `nas-rw` - чтение и запись через Samba.
+
+    Пользователям Samba необходимо назначить необходимые права на чтение и запись. После [добавить для папок разрешения](#set-permissions-for-samba) для этих групп.
+
+1. <span id="set-samba-settings">Настроить конфиг Samba `/etc/samba/smb.conf`</span>:
+
+    1. В секции `[homes]` добавить строку `available = no` для скрытия домашней папки.
+    1. В секции `[Global]` добавить строки для наследования ACL при работе через Samba:
+        ```ini
+        inherit acls = yes
+        map acl inherit = yes
+        ```
+
+    1. Проверить и применить конфигурацию:
+        ```bash
+        testparm
+        systemctl restart smbd
+        ```
+
+### Настройки Samba на хосте
+
+- [Установка необходимых пакетов](#install-packages-for-samba)
+- [Монтирование папок](#mount-dirs-for-samba)
+- [Права доступа](#set-permissions-for-samba)
+
+    ---
+
+1. <span id="install-packages-for-samba">Установить пакет `acl`</span>:
+    ```bash
+    apt install acl -y
+    ```
+
+1. <span id="mount-dirs-for-samba">Подключить необходимые каталоги в контейнер</span>:
+    ```bash
+    pct set 120 -mp0 /mnt/storage,mp=/srv/storage
+    pct set 120 -mp1 /mnt/readonly,mp=/mnt/readonly
+    ```
+
+    _где `120` - номер контейнера, `-mp0` - номер точки монтирования, `/mnt/storage` - каталог на хосте, `/srv/storage` - каталог в контейнере._
+    _Подразумевается, что Readonly для группы пользователей, а не всего контейнера._
+
+1. <span id="set-permissions-for-samba">Установить права доступа</span>:
+
+    _На стандартном отображении UID непривилегированного LXC `UID 1000` внутри контейнера базово сдвигаетсся на 100000 и будет соответствовать `UID 101000` на хосте._
+
+    - Только чтение:
+        ```bash
+        setfacl -m \
+            u:101000:rwx,g:102003:rwx,g:102001:r-x \
+            /mnt/readonly
+
+        setfacl -m \
+            d:u::rwx,d:g::r-x,d:g:102003:rwx,d:g:102001:r-x,d:m::rwx,d:o::--- \
+            /mnt/readonly
+        ```
+
+    - Чтение и запись:
+        ```bash
+        setfacl -m \
+            u:101000:rwx,g:102003:rwx,g:102001:r-x,g:102002:rwx \
+            /mnt/storage
+
+        setfacl -m \
+            d:u::rwx,d:g::r-x,d:g:102003:rwx,d:g:102001:r-x,d:g:102002:rwx,d:m::rwx,d:o::--- \
+            /mnt/storage
+        ```

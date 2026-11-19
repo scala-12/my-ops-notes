@@ -26,12 +26,6 @@
 
     - **Network**: статичный адрес.
 
-1. Подключить папки:
-    ```bash
-    pct set 100 -mp0 /mnt/share/software,mp=/srv/software,ro=1
-    pct set 100 -mp1 /mnt/share/raw,mp=/srv/raw
-    ```
-
 1. Запустить контейнер.
 
 ## Settings
@@ -42,75 +36,34 @@
     apt install samba acl -y
     ```
 
-1. Создать пользователя:
+1. Создать пользователя Samba, добавить пароль и активировать его:
     ```bash
     useradd -M -s /usr/sbin/nologin -u 1000 storage
     smbpasswd -a storage
+    smbpasswd -e storage
     ```
 
     На стандартном отображении UID непривилегированного LXC `UID 1000` внутри контейнера соответствует `UID 101000` на хосте.
 
-1. На хосте настроить ACL:
-
-    Установить пакет `acl`:
-
-    ```bash
-    apt install acl -y
-    ```
-
-    Дать права прохода через ACL:
-
-    ```bash
-    setfacl -m u:101000:--x /mnt # Добавить все родительские каталоги до требуемого каталога
-    ```
-
-    Дать права на каталог:
-
-    ```bash
-    setfacl -m u:101000:rx /mnt/share/software   # доступ к чтению
-    setfacl -R -m u:101000:r-X /mnt/share/software
-
-    setfacl -R -m u:101000:rwX /mnt/share/raw   # доступ к записи
-    setfacl -R -d -m u:101000:rwX /mnt/share/raw
-    ```
-
-1. В контейнере настроить конфиг Samba `/etc/samba/smb.conf`:
-
-    Добавить в существующие секции:
+1. [Настроить Samba](../disk-utils.md#samba-settings).
+1. Добавить в секцию `[global]` параметр `guest ok = no`, а в конце файла добавить новые секции для папок Samba.
+   К примеру:
 
     ```ini
-    [global]
-        workgroup = WORKGROUP
-        server string = Proxmox Samba
-        security = user
-        map to guest = never
-
-    [homes]
-        available = no
-    ```
-
-    Добавить в конце новые секции:
-
-    ```ini
-    [software]
-        path = /srv/software
-        browseable = yes
-        read only = yes
-        guest ok = no
-        valid users = storage
-
-    [raw]
-        path = /srv/raw
+    [Readonly]
+        path = /srv/readonly
         browseable = yes
         read only = no
-        guest ok = no
-        valid users = storage
-        force user = storage
-        create mask = 0660
-        directory mask = 0770
+        valid users = @nas-ro @nas-rw
+
+    [Write]
+        path = /srv/write
+        browseable = yes
+        read only = no
+        valid users = @nas-rw
     ```
 
-    Проверить и применить конфигурацию:
+    После проверить и применить конфигурацию:
 
     ```bash
     testparm
