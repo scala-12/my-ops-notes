@@ -109,11 +109,9 @@ ollama ps
 
 ## Web UI
 
-Для работы с языковыми моделями через веб-интерфейс можно [установить Open WebUI](open-web-ui.md#install-docker).
+Для работы с языковыми моделями через веб-интерфейс можно [установить Open WebUI](open-web-ui.md#install).
 
-### Для Proxmox VE
-
-#### Контейнер с Open WebUI
+### Open WebUI через LXC в Proxmox VE
 
 1. Создать контейнер (CT) *Debian 13*
 1. Обновить контейнер
@@ -125,136 +123,18 @@ ollama ps
 1. [Установить *Docker Engine*](../os/linux/docker-engine.md#installation)
 1. Установить *Open WebUI* через Docker (Ссылка на инструкцию - выше)
 
-#### Расшифровка аудио
+### Расшифровка аудио
 
-1. [Создать контейнер](../proxmox/blueprints/lxc-for-ai.md) `whisper-gpu`:
-    - **Disk size:** `16` GB
-    - **Cores:** `4` (вся нагрузка пойдет на видеокарту, не обязательно выделять много).
-    - **Memory:** `8` GB (нужно только для первичной распаковки модели в VRAM)
-    - **Swap:** `1024` MiB
-    - Подключить дополнительный диск `/mnt/storage` для моделей на 32 GB, без бекапа.
-    - Пробросить видеокарту.
+При наличии [локального speeches-сервера](speeches-gpu.md), его можно интегрировать в _Open WebUI_:
+1. Перейти в настройки **Open WebUI > Настройки > Инструменты > Аудио**.
+1. В разделе **Speech-to-Text** задать следующие параметры:
+    - **STT Engine:** `OpenAI`
+    - **API Base URL:** `http://<IP_нового_LXC>:8000/v1`
+    - **API Key:** `sk-local`
 
-1. [Установить *Docker Engine*](../os/linux/docker-engine.md#installation).
-1. Установить [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
-    1. Установить необходимые пакеты:
-        ```bash
-        apt update && apt install -y --no-install-recommends \
-            ca-certificates \
-            curl \
-            gnupg2
-        ```
+        Контейнер speaches запускается с отключенной проверкой авторизации и принимает любой запрос.
+        Надо ввести любой набор символов, потому что поле не должно быть пустым.
 
-    1. Подключите репозиторий:
-        ```bash
-        curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
-            && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
-            sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
-            tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
-        ```
+    - **STT Model:** `<название модели>`
 
-    1. Установить пакеты NVIDIA Container Toolkit:
-        ```bash
-        apt update
-        export NVIDIA_CONTAINER_TOOLKIT_VERSION=1.20.2-1
-        apt-get install -y \
-            nvidia-container-toolkit=${NVIDIA_CONTAINER_TOOLKIT_VERSION} \
-            nvidia-container-toolkit-base=${NVIDIA_CONTAINER_TOOLKIT_VERSION} \
-            libnvidia-container-tools=${NVIDIA_CONTAINER_TOOLKIT_VERSION} \
-            libnvidia-container1=${NVIDIA_CONTAINER_TOOLKIT_VERSION}
-        ```
-
-    1. Отключение cgroups внутри непривилегированного LXC для предотвращения ошибки доступа к GPU:
-        ```bash
-        nvidia-ctk runtime configure --runtime=docker
-        sed -i 's/^#no-cgroups = false/no-cgroups = true/' /etc/nvidia-container-runtime/config.toml
-        systemctl restart docker
-        ```
-
-    Для проверки работоспособности GPU в Docker можно использовать следующую команду:
-    ```bash
-    docker run --rm --gpus all nvidia/cuda:12.4.1-base-ubuntu22.04 nvidia-smi
-    ```
-    Если все правильно, будет выведена таблица с информацией о GPU.
-
-1. Настройка файрволла (укажите свою подсеть):
-    ```bash
-    ufw allow from 192.168.1.0/24 to any port 8000 proto tcp comment 'Доступ из локальной сети'
-    ufw deny 8000/tcp comment 'Блокировка внешнего доступа'
-    ufw reload
-    ```
-
-1. Запуск контейнера Speaches:
-    1. Создайте файл `/opt/speaches/docker-compose.yml`.
-
-        В строке с указанием портов замените `192.168.1.50` на IP-адрес вашего сервера.
-        Это позволит корректно настраивать фаерволл и настроить доступ к контейнеру.
-
-        ```bash
-        mkdir -p /opt/speaches && cd /opt/speaches
-        cat << 'EOF' > docker-compose.yml
-        services:
-          speaches:
-            image: ghcr.io/speaches-ai/speaches:latest-cuda
-            container_name: speaches
-            restart: unless-stopped
-            ports:
-              - "192.168.1.50:8000:8000"
-            volumes:
-              - /mnt/storage/hf-cache/hub:/home/ubuntu/.cache/huggingface/hub
-            environment:
-              - HF_HOME=/home/ubuntu/.cache/huggingface
-              - WHISPER__INFERENCE_DEVICE=cuda
-              - WHISPER__COMPUTE_TYPE=float16
-              - WHISPER__VAD_FILTER=true
-            deploy:
-              resources:
-                reservations:
-                  devices:
-                    - driver: nvidia
-                      count: 1
-                      capabilities: [gpu]
-        EOF
-        ```
-
-        При ошибке можно выполнить `docker compose down && docker compose up -d` для сброса контейнера и повторной сборки.
-
-    1. Создать папку моделей, настроить права на запись:
-        ```bash
-        mkdir /mnt/storage/hf-cache/hub -p
-        chmod -R 777 /mnt/storage/hf-cache
-        ```
-
-    1. Запустить контейнер:
-        ```bash
-        docker compose up -d
-        ```
-
-    1. Скачать модель:
-        ```bash
-        curl -X POST http://localhost:8000/v1/models/<ИМЯ_МОДЕЛИ>
-        ```
-
-        Варианты моделей:
-        - `Systran/faster-whisper-large-v3`
-        - `deepdml/faster-whisper-large-v3-turbo-ct2`
-        - `Systran/faster-whisper-medium`
-
-1. Подключение к Open WebUI:
-    1. Перейти в настройки **Open WebUI > Настройки > Инструменты > Аудио**.
-    1. В разделе **Speech-to-Text** задать следующие параметры:
-        - **STT Engine:** `OpenAI`
-        - **API Base URL:** `http://<IP_нового_LXC>:8000/v1`
-        - **API Key:** `sk-local`
-
-            Контейнер speaches запускается с отключенной проверкой авторизации и принимает любой запрос.
-            Надо ввести любой набор символов, потому что поле не должно быть пустым.
-
-        - **STT Model:** `<название модели>`
-
-        При переключении модели стоит перезагрузить Docker, чтобы выгрузить предыдущую модель:
-        ```bash
-        docker restart speaches
-        ```
-
-    1. Если необходимо указать язык речи по умолчанию, перейти в настройки **Open WebUI > Настройки > Предпочтения > Аудио** и укажите его.
+1. Если необходимо указать язык речи по умолчанию, перейти в настройки **Open WebUI > Настройки > Предпочтения > Аудио** и укажите его.
