@@ -1,6 +1,8 @@
 # Open WebUI
 
-## Install (Docker)
+## Install
+
+### Docker
 
 *[Актуальная инструкция](https://github.com/open-webui/open-webui#quick-start-with-docker) в репозитории*.
 
