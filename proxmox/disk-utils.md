@@ -1,7 +1,7 @@
 # Disk utils
 
 1. [Изменение размера диска](#resize-disk)
-1. [Монтирование диска](#mount-disk)
+1. [Монтирование диска](#mount)
 1. [Шаринг диска между VM](#share-disk)
 1. [Подключение ZFS датасета как Directory](#using-zfs-dataset-as-directory)
 1. [Настройка общего доступа к файлам для Samba](#samba-settings)
@@ -31,7 +31,21 @@
     sudo resize2fs /dev/sda2
     ```
 
-## Mount disk
+## Mount
+
+- [Точка монтирования LXC](#lxc-mount-point)
+- [Монтирование диска VM](#vm-mount-disk)
+
+---
+
+### LXC mount point
+
+1. Через веб-интерфейс перейти в ресурсы контейнера **Datacenter > Node > LXC > Resources**.
+1. Добавить точку монтирования **Add > Mount point**:
+    - Нужно выбрать _Storage_, размер и указать путь монтирования в контейнере.
+    - Если резервирование не нужно - отключить (**Backup:** `❌`).
+
+### VM mount disk
 
 Проверялось только на Ubuntu.
 
@@ -82,7 +96,7 @@
 1. **Host shell**:
     1. В файле **/etc/pve/qemu-server/200.conf** (где 200 - id первой VM) в строке с *id* диска добавить параметр `shared=1`, скопировать всю строку в буфер обмена
     1. В файле **/etc/pve/qemu-server/300.conf** (где 300 - id второй VM) добавить скопированную строку, исправив номер диска, если он пересекается с другим
-1. [Смонтировать диск](#mount-disk) в обеих VM
+1. [Смонтировать диск](#vm-mount-disk) в обеих VM
 
 ## Using ZFS dataset as directory
 
